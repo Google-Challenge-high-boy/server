@@ -1,9 +1,6 @@
 package com.highboy.server.controller.user;
 
-import com.highboy.server.controller.user.dto.UserCreateRequestDto;
-import com.highboy.server.controller.user.dto.UserLoginResponseDto;
-import com.highboy.server.controller.user.dto.UserResponseDto;
-import com.highboy.server.controller.user.dto.UserSimpleResponseDto;
+import com.highboy.server.controller.user.dto.*;
 import com.highboy.server.domain.user.User;
 import com.highboy.server.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -51,4 +48,9 @@ public class UserController {
         return ResponseEntity.ok(userService.isEmailDuplicated(email));
     }
 
+    @GetMapping("/info")
+    public UserInfoResponseDto getUserInfo(@RequestParam String email) {
+        Optional<User> user = userService.getUserByEmail(email);
+        return new UserInfoResponseDto(user);
+    }
 }
