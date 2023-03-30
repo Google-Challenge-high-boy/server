@@ -9,9 +9,9 @@ import java.util.Optional;
 @Getter
 public class UserSimpleResponseDto {
 
-    private final Boolean success;
+    private final Number status;
 
-    public UserSimpleResponseDto(Boolean result) {
-        this.success = result;
+    public UserSimpleResponseDto() {
+        this.status = 200;
     }
 }
