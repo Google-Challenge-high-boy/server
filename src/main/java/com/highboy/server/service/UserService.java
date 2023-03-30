@@ -1,7 +1,7 @@
 package com.highboy.server.service;
 
 import com.highboy.server.domain.user.User;
-import com.highboy.server.exception.RecordNotFoundException;
+//import com.highboy.server.exception.RecordNotFoundException;
 import com.highboy.server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserService {
+public class UserService { //userInfo에 조인
     private final UserRepository userRepository;
 
     public User insertUser(User user) {

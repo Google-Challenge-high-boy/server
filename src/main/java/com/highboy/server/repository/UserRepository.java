@@ -10,12 +10,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
-
-    @Query("select m from Member m where m.accountName = :accountName")
-    User findByUserName(String userName);
     Optional<User> findByEmail(String email);
 
     Optional<User> findById(Long userId);
-
     Page<User> findAll(Pageable pageable);
 }
