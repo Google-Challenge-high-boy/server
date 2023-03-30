@@ -2,6 +2,7 @@ package com.highboy.server.controller.friend;
 
 import com.highboy.server.controller.friend.dto.FriendCreateRequestDto;
 import com.highboy.server.controller.friend.dto.FriendCreateResponseDto;
+import com.highboy.server.controller.friend.dto.FriendFollowersResponseDto;
 import com.highboy.server.controller.user.dto.UserInfoDto;
 import com.highboy.server.domain.friend.Friend;
 import com.highboy.server.service.FriendService;
@@ -20,9 +21,10 @@ public class FriendController {
     private final FriendService friendService;
 
     @GetMapping("")
-    public List<Friend> getFriends(HttpServletRequest request){
+    public FriendFollowersResponseDto getFriends(HttpServletRequest request){
         int userId = Integer.parseInt(request.getHeader("userId"));
-        return friendService.getFriends((long) userId);
+        List<Friend> friendList = friendService.getFriends((long) userId);
+        return new FriendFollowersResponseDto(friendList);
     }
 
     @PostMapping("")
