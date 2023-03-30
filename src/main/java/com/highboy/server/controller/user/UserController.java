@@ -1,15 +1,19 @@
 package com.highboy.server.controller.user;
 
 import com.highboy.server.controller.user.dto.UserCreateRequestDto;
+import com.highboy.server.controller.user.dto.UserLoginResponseDto;
 import com.highboy.server.controller.user.dto.UserResponseDto;
+import com.highboy.server.controller.user.dto.UserSimpleResponseDto;
 import com.highboy.server.domain.user.User;
 import com.highboy.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequestMapping("/v1/users")
@@ -27,9 +31,19 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public UserResponseDto createUser(@Valid @RequestBody UserCreateRequestDto userCreateRequestDto) {
-        User user = userService.insertUser(userCreateRequestDto.toEntity());
-        return new UserResponseDto(user);
+    public UserSimpleResponseDto createUser(HttpServletRequest request, @Valid @RequestBody UserCreateRequestDto userCreateRequestDto) {
+        String email = request.getHeader("userId");
+
+        Boolean result = userService.insertUser(userCreateRequestDto.toEntity(email));
+
+        return new UserSimpleResponseDto(result);
+    }
+
+    @PostMapping("/signin")
+    public UserLoginResponseDto getUser(HttpServletRequest request) {
+        String email = request.getHeader("userId");
+        Boolean result = !isEmailDuplicated(email).getBody();
+        return new UserLoginResponseDto(result);
     }
 
     @GetMapping("/email")

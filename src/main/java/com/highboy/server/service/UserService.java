@@ -3,6 +3,7 @@ package com.highboy.server.service;
 import com.highboy.server.domain.user.User;
 import com.highboy.server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,8 +16,13 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    public User insertUser(User user) {
-        return userRepository.save(user);
+    public Boolean insertUser(User user) {
+        if(isEmailDuplicated(user.getEmail()))
+        {
+            userRepository.save(user);
+            return true;
+        }
+        else return false;
     }
 
     public List<User> getAllUsers() {

@@ -12,36 +12,18 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class UserCreateRequestDto {
     @NotNull(message = "이름이 필요합니다.")
-    private String name;
-
-    @NotNull(message = "이메일이 필요합니다.")
-    private String email;
-
-    private String password;
-
-    @NotNull(message = "전화번호가 필요합니다.")
-    private String phoneNumber;
-
-    //    @NotNull(message = "구글 아이디가 필요합니다.")
-    private Long googleId;
+    private String nickname;
 
     @Builder
-    public UserCreateRequestDto(@NonNull String name,
-                                @NonNull String email,
-                                Long googleId,
-                                String password) {
-        this.name = name;
-        this.email = email;
-        this.googleId = googleId;
-        this.password = password;
+    public UserCreateRequestDto(@NonNull String nickname) {
+        this.nickname = nickname;
+
     }
 
-    public User toEntity() {
+    public User toEntity(String email) {
         return User.builder()
-                .name(this.name)
-                .email(this.email)
-                .password(this.password)
-                .googleId(this.googleId)
+                .name(this.nickname)
+                .email(email)
                 .build();
     }
 }
