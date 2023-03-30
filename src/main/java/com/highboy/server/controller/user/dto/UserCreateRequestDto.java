@@ -14,16 +14,20 @@ public class UserCreateRequestDto {
     @NotNull(message = "이름이 필요합니다.")
     private String nickname;
 
+    @NotNull(message = "이메일이 필요합니다.")
+    private String email;
+
     @Builder
-    public UserCreateRequestDto(@NonNull String nickname) {
+    public UserCreateRequestDto(@NonNull String nickname, @NonNull String email) {
         this.nickname = nickname;
+        this.email = email;
 
     }
 
-    public User toEntity(String email) {
+    public User toEntity() {
         return User.builder()
                 .name(this.nickname)
-                .email(email)
+                .email(this.email)
                 .build();
     }
 }

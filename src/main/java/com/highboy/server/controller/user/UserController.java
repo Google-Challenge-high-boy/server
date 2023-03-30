@@ -2,6 +2,7 @@ package com.highboy.server.controller.user;
 
 import com.highboy.server.controller.user.dto.*;
 import com.highboy.server.domain.user.User;
+import com.highboy.server.response.ErrorResponse;
 import com.highboy.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,19 +29,16 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public UserSimpleResponseDto createUser(HttpServletRequest request, @Valid @RequestBody UserCreateRequestDto userCreateRequestDto) {
-        String email = request.getHeader("userId");
-
-        Boolean result = userService.insertUser(userCreateRequestDto.toEntity(email));
-
-        return new UserSimpleResponseDto(result);
+    public UserSimpleResponseDto createUser(@Valid @RequestBody UserCreateRequestDto userCreateRequestDto) {
+        userService.insertUser(userCreateRequestDto.toEntity());
+        return new UserSimpleResponseDto();
     }
 
     @PostMapping("/signin")
-    public UserLoginResponseDto getUser(HttpServletRequest request) {
-        String email = request.getHeader("userId");
-        Boolean result = !isEmailDuplicated(email).getBody();
-        return new UserLoginResponseDto(result);
+    public UserLoginResponseDto getUser(@Valid @RequestBody UserLoginRequestDto userLoginRequestDto) {
+        String email = userLoginRequestDto.getEmail();
+        User user = userService.getUserByEmail(email).orElseThrow(() -> new ErrorResponse(400, "로그인에 실패했습니다."));
+        return new UserLoginResponseDto(user);
     }
 
     @GetMapping("/email")
@@ -49,8 +47,9 @@ public class UserController {
     }
 
     @GetMapping("/info")
-    public UserInfoResponseDto getUserInfo(@RequestParam String email) {
-        Optional<User> user = userService.getUserByEmail(email);
+    public UserInfoResponseDto getUserInfo(HttpServletRequest request) {
+        Long userId = Long.valueOf(request.getHeader("userId"));
+        Optional<User> user = userService.getUserById(userId);
         return new UserInfoResponseDto(user);
     }
 }
