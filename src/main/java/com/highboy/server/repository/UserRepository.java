@@ -11,6 +11,8 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    @Query("select m from Member m where m.accountName = :accountName")
+    User findByUserName(String userName);
     Optional<User> findByEmail(String email);
 
     Page<User> findAll(Pageable pageable);
