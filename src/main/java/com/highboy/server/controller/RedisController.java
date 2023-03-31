@@ -2,6 +2,8 @@ package com.highboy.server.controller;
 
 import java.util.Map;
 
+import com.highboy.server.service.KomantleService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,25 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/redis")
+@RequiredArgsConstructor
 public class RedisController {
 
+    private  final KomantleService komantleService;
     private final RedisTemplate<String, String> redisTemplate;
-
-    public RedisController(RedisTemplate<String, String> redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
 
     // set
     @PostMapping("")
     public String setRedisKey(@RequestBody Map<String, String> req){
-        ValueOperations<String, String> vop = redisTemplate.opsForValue();
-        try {
-            // Redis Set Key-value
-            vop.set(req.get("key").toString(), req.get("value").toString());
-            return "set message success";
-        } catch (Exception e) {
-            return "set message fail";
-        }
+        return komantleService.setRedisKey(req);
     }
 
     // get
